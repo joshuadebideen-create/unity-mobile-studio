@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101827"><meta name="description" content="Mobile Unity project workshop and Android cloud-build helper">
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css">
+<title>Unity Mobile Studio</title>
+</head>
+<body>
+<header class="topbar">
+ <div class="logo">U<span>+</span></div><div class="brand"><strong>Unity Mobile Studio</strong><small>Mobile game development workspace</small></div>
+ <button id="installBtn" class="quiet hidden">Install</button>
+</header>
+<main>
+ <section class="hero">
+  <div class="eyebrow">YOUR POCKET DEVELOPMENT WORKSPACE</div>
+  <h1>Build your next<br><span>Unity game.</span></h1>
+  <p>Manage project files, edit C# scripts, export a Unity-ready folder ZIP and prepare Android cloud builds from your phone.</p>
+  <div class="actions"><button id="newProject">＋ New project</button><button id="importZip" class="secondary">Import project ZIP</button><input id="zipInput" type="file" accept=".zip" hidden></div>
+  <div class="smallnote">Mobile workspace prototype · Unity Editor and APK compilation run separately</div>
+ </section>
+ <section class="summary">
+  <div><small>PROJECT</small><strong id="projectNameStat">Truck Simulator</strong></div>
+  <div><small>FILES</small><strong id="fileCount">0</strong></div>
+  <div><small>STATUS</small><strong class="green">Workspace ready</strong></div>
+ </section>
+ <nav class="tabs">
+  <button class="tab active" data-tab="files">Files & scripts</button><button class="tab" data-tab="build">Android build</button><button class="tab" data-tab="guide">Setup guide</button>
+ </nav>
+ <section id="filesTab" class="tabpage">
+  <div class="sectiontitle"><div><div class="eyebrow">PROJECT EXPLORER</div><h2>Files & scripts</h2></div><button id="addFile" class="secondary compact">＋ Add file</button></div>
+  <div class="workspace">
+   <aside class="filelist"><div class="filelisthead">PROJECT FILES <button id="refreshTree" title="Refresh">↻</button></div><div id="tree"></div></aside>
+   <div class="editor">
+    <div class="editortop"><span id="currentPath">Assets/Scripts/Trucks/TruckController.cs</span><span class="language">EDITOR</span></div>
+    <input id="filename" aria-label="File path" placeholder="Assets/Scripts/MyScript.cs">
+    <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="File contents"></textarea>
+    <div class="actions editorbuttons"><button id="saveFile">Save file</button><button id="downloadFile" class="secondary">Download file</button></div>
+    <p class="hint">Files are held in this browser workspace until you export a ZIP or JSON backup. Test C# scripts in Unity.</p>
+   </div>
+  </div>
+  <div class="actions exportactions"><button id="exportZip">Export Unity project ZIP</button><button id="exportJson" class="secondary">Backup as JSON</button></div>
+  <div id="message" role="status" aria-live="polite"></div>
+ </section>
+ <section id="buildTab" class="tabpage hidden">
+  <div class="panel">
+   <div class="eyebrow">CLOUD BUILD WORKFLOW</div><h2>Prepare an Android APK build</h2>
+   <p>Generate a GitHub Actions workflow file for a Unity project. You must commit a complete Unity project and configure the required Unity licence credentials in GitHub repository secrets.</p>
+   <label for="appName">Build / app name</label><input id="appName" value="International Truck Simulator">
+   <label for="unityVersion">Unity Editor version</label><input id="unityVersion" value="6000.0.23f1">
+   <label for="bundleId">Android package ID</label><input id="bundleId" value="com.yourstudio.internationaltrucksimulator">
+   <button id="makeWorkflow" class="full">Generate build workflow (.yml)</button>
+   <button id="downloadBuildGuide" class="secondary full">Download build checklist</button>
+   <div class="warning"><strong>Important:</strong> This generates a workflow file; it does not build the APK on your phone. Unity licence setup and current GameCI compatibility must be checked before running it.</div>
+  </div>
+  <div class="panel"><h3>GitHub repository checklist</h3><ol><li>Repository includes <code>Assets/</code>, <code>Packages/</code> and <code>ProjectSettings/</code>.</li><li>Workflow is saved under <code>.github/workflows/build-android.yml</code>.</li><li>Configure Unity licence secrets as required by the build action.</li><li>Run the workflow from GitHub Actions and download the APK artifact if successful.</li></ol><button id="openGithub" class="secondary full">Open GitHub</button></div>
+ </section>
+ <section id="guideTab" class="tabpage hidden">
+  <div class="panel"><div class="eyebrow">QUICK START</div><h2>Use it from Android</h2>
+   <ol class="guide"><li><strong>Start here</strong><p>Use the Files tab to edit or add scripts. Select a file in the project explorer.</p></li><li><strong>Export your project</strong><p>Choose Export Unity project ZIP. The ZIP preserves paths so files can be copied into a Unity project.</p></li><li><strong>Use a real Unity project</strong><p>These starter files are not a complete Unity project. Create or open a Unity project in Unity Editor on a supported computer or cloud workspace.</p></li><li><strong>Build the APK</strong><p>Commit the full project to GitHub, generate the workflow in the Android build tab, configure licence secrets and run Actions.</p></li><li><strong>Install the app</strong><p>Host this workspace on HTTPS to install it as a PWA. Open it in Chrome and choose Install app or Add to Home screen.</p></li></ol>
+  </div>
+  <div class="panel"><h3>Included starter systems</h3><div class="chips"><span>Truck controller</span><span>Truck definition</span><span>Mobile input bridge</span><span>Project README</span><span>Android build workflow generator</span></div></div>
+ </section>
+ <footer>Independent helper prototype. Not affiliated with Unity Technologies. No Unity licence or APK build is included.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script><script src="app.js"></script>
+</body></html>

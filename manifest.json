@@ -1,0 +1,10 @@
+{
+  "name": "Unity Mobile Studio",
+  "short_name": "Unity Studio",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a111e",
+  "theme_color": "#101827",
+  "description": "Mobile Unity project editor and Android build helper",
+  "icons": []
+}
