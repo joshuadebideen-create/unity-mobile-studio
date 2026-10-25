@@ -576,7 +576,7 @@ saveWorkspaceToDevice();
 
 msg(
     "Startup check — TestTruck.cs restored: " +
-    Object.prototype.hasOwnProperty.call(
+    ..prototype.hasOwnProperty.call(
         files,
         "Assets/Scripts/Trucks/TestTruck.cs"
     )
