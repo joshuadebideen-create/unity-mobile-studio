@@ -57,7 +57,6 @@ function restoreWorkspaceFromDevice() {
 
 restoreWorkspaceFromDevice();
 
-);
 function msg(s) {
     $("message").textContent = s;
 }
