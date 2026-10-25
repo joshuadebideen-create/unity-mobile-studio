@@ -306,14 +306,31 @@ $("newFile").onclick = () => {
 
     renderTree();
     selectFile(newPath);
-const savedWorkspace = localStorage.getItem(UMS_STORAGE_KEY);
-const savedData = savedWorkspace ? JSON.parse(savedWorkspace) : null;
 
-console.log(
-    "New file saved:",
-    Boolean(savedData && savedData.files &&
-    Object.prototype.hasOwnProperty.call(savedData.files, newPath))
-);
+try {
+    const savedWorkspace = localStorage.getItem(UMS_STORAGE_KEY);
+    const savedData = savedWorkspace
+        ? JSON.parse(savedWorkspace)
+        : null;
+
+    const existsInStorage = Boolean(
+        savedData &&
+        savedData.files &&
+        Object.prototype.hasOwnProperty.call(
+            savedData.files,
+            newPath
+        )
+    );
+
+    msg(
+        existsInStorage
+            ? "Diagnostic: new file is present in saved storage."
+            : "Diagnostic: new file is missing from saved storage."
+    );
+} catch (error) {
+    msg("Diagnostic failed: " + error.message);
+}
+
     if (saveWorkspaceToDevice()) {
         msg("Created " + newPath + ".");
     } else {
