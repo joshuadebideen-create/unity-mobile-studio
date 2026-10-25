@@ -306,7 +306,14 @@ $("newFile").onclick = () => {
 
     renderTree();
     selectFile(newPath);
+const savedWorkspace = localStorage.getItem(UMS_STORAGE_KEY);
+const savedData = savedWorkspace ? JSON.parse(savedWorkspace) : null;
 
+console.log(
+    "New file saved:",
+    Boolean(savedData && savedData.files &&
+    Object.prototype.hasOwnProperty.call(savedData.files, newPath))
+);
     if (saveWorkspaceToDevice()) {
         msg("Created " + newPath + ".");
     } else {
