@@ -195,13 +195,15 @@ async function exportZip() {
     );
 
     try {
-        const blob = await zip.generateAsync({ type: "blob" });
-        const a = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        a.href = url;
-        a.download = projectName().toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-files.zip";
-        a.click();
-        URL.revokeObjectURL(url);
+        
+const blob = await zip.generateAsync({ type: "blob" });
+
+const filename =
+    projectName().toLowerCase().replace(/[^a-z0-9]+/g, "-") +
+    "-files.zip";
+
+download(filename, blob, "application/zip");
+
         msg("Project files ZIP exported. Copy these files into your actual Unity project.");
     } catch (e) {
         msg("ZIP export failed. Try again.");
