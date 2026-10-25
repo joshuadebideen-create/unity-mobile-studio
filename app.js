@@ -28,14 +28,7 @@ function saveWorkspaceToDevice() {
     }
 }
 
-function restoreWorkspaceFromDevice() {
-    console.log(
-    "Restored TestTruck.cs:",
-    Object.prototype.hasOwnProperty.call(
-        files,
-        "Assets/Scripts/Trucks/TestTruck.cs"
-    )
-);
+function restoreWorkspaceFromDevice() {   
     try {
         const saved = localStorage.getItem(UMS_STORAGE_KEY);
         if (!saved) return;
