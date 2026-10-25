@@ -263,6 +263,58 @@ document.querySelectorAll(".tab").forEach(b =>
 
 $("saveFile").onclick = saveFile;
 
+$("newFile").onclick = () => {
+    const path = prompt(
+        "Enter the new file path:",
+        "Assets/Scripts/Trucks/MyNewTruck.cs"
+    );
+
+    if (path === null) return;
+
+    const newPath = path.trim();
+
+    if (!isSafeProjectPath(newPath)) {
+        msg("Enter a safe relative file path.");
+        return;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(files, newPath)) {
+        msg("That file already exists. Choose a different path.");
+        return;
+    }
+
+    const extension = newPath.split(".").pop().toLowerCase();
+
+    let content = "";
+
+    if (extension === "cs") {
+        content =
+            "using UnityEngine;\n\n" +
+            "public class MyNewTruck : MonoBehaviour\n" +
+            "{\n" +
+            "    private void Start()\n" +
+            "    {\n" +
+            "    }\n\n" +
+            "    private void Update()\n" +
+            "    {\n" +
+            "    }\n" +
+            "}\n";
+    }
+
+    files[newPath] = content;
+    currentPath = newPath;
+
+    renderTree();
+    selectFile(newPath);
+
+    if (saveWorkspaceToDevice()) {
+        msg("Created " + newPath + ".");
+    } else {
+        msg("File created for this session, but device storage failed.");
+    }
+};
+
+
 function isSafeProjectPath(path) {
     return Boolean(
         path &&
