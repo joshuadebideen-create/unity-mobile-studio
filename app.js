@@ -575,10 +575,5 @@ renderTree();
 selectFile(currentPath);
 saveWorkspaceToDevice();
 
-msg(
-    "Startup check — TestTruck.cs restored: " +
-    ..prototype.hasOwnProperty.call(
-        files,
-        "Assets/Scripts/Trucks/TestTruck.cs"
-    )
-);
+msg("Workspace ready. Files are stored in this browser until exported.");
+    
