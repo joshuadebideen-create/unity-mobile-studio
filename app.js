@@ -186,28 +186,48 @@ async function exportZip() {
         return;
     }
 
-    const zip = new JSZip();
-    Object.entries(files).forEach(([p, c]) => zip.file(p, c));
-    zip.file(
-        "MOBILE_STUDIO_README.txt",
-        "Exported workspace text files. Copy into a real Unity project; this is not a complete project by itself."
-    );
-
     try {
-        
-const blob = await zip.generateAsync({ type: "blob" });
+        const zip = new JSZip();
 
-const filename =
-    projectName().toLowerCase().replace(/[^a-z0-9]+/g, "-") +
-    "-files.zip";
+        Object.entries(files).forEach(([path, content]) => {
+            zip.file(path, content);
+        });
 
-download(filename, blob, "application/zip");
+        zip.file(
+            "MOBILE_STUDIO_README.txt",
+            "Exported workspace text files. Copy into a real Unity project; this is not a complete project by itself."
+        );
 
-        msg("Project files ZIP exported. Copy these files into your actual Unity project.");
-    } catch (e) {
-        msg("ZIP export failed. Try again.");
+        const blob = await zip.generateAsync({
+            type: "blob"
+        });
+
+        const filename =
+            projectName().toLowerCase().replace(/[^a-z0-9]+/g, "-") +
+            "-files.zip";
+
+        const message = $("message");
+        message.textContent = "";
+
+        const note = document.createElement("p");
+        note.textContent =
+            "ZIP ready. Tap the link below to download it:";
+        message.appendChild(note);
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.textContent = "Download " + filename;
+        link.style.display = "block";
+        link.style.padding = "16px";
+        link.style.wordBreak = "break-word";
+        message.appendChild(link);
+
+    } catch (error) {
+        msg("ZIP export failed: " + error.message);
     }
 }
+
 
 async function importZip(file) {
     if (typeof JSZip === "undefined") {
