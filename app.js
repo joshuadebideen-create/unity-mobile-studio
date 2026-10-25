@@ -56,12 +56,7 @@ function restoreWorkspaceFromDevice() {
 }
 
 restoreWorkspaceFromDevice();
-msg(
-    "Startup check — TestTruck.cs restored: " +
-    Object.prototype.hasOwnProperty.call(
-        files,
-        "Assets/Scripts/Trucks/TestTruck.cs"
-    )
+
 );
 function msg(s) {
     $("message").textContent = s;
@@ -578,3 +573,11 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
 renderTree();
 selectFile(currentPath);
 saveWorkspaceToDevice();
+
+msg(
+    "Startup check — TestTruck.cs restored: " +
+    Object.prototype.hasOwnProperty.call(
+        files,
+        "Assets/Scripts/Trucks/TestTruck.cs"
+    )
+);
