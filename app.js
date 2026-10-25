@@ -263,6 +263,89 @@ document.querySelectorAll(".tab").forEach(b =>
 
 $("saveFile").onclick = saveFile;
 
+function isSafeProjectPath(path) {
+    return Boolean(
+        path &&
+        !path.startsWith("/") &&
+        !path.split("/").includes("..") &&
+        !path.endsWith("/")
+    );
+}
+
+$("renameFile").onclick = () => {
+    const oldPath = currentPath;
+    const newPath = $("filename").value.trim();
+
+    if (!oldPath || !Object.prototype.hasOwnProperty.call(files, oldPath)) {
+        msg("Select an existing file first.");
+        return;
+    }
+
+    if (!isSafeProjectPath(newPath)) {
+        msg("Enter a safe relative file path.");
+        return;
+    }
+
+    if (newPath === oldPath) {
+        msg("The file path has not changed.");
+        return;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(files, newPath)) {
+        msg("A file already exists at that path. Choose another name.");
+        return;
+    }
+
+    files[oldPath] = $("code").value;
+    files[newPath] = files[oldPath];
+    delete files[oldPath];
+
+    currentPath = newPath;
+    $("filename").value = newPath;
+    $("currentPath").textContent = newPath;
+
+    renderTree();
+
+    if (saveWorkspaceToDevice()) {
+        msg("Renamed file to " + newPath + ".");
+    } else {
+        msg("Rename made in this session, but device storage failed. Export a backup.");
+    }
+};
+
+$("deleteFile").onclick = () => {
+    const path = currentPath;
+
+    if (!path || !Object.prototype.hasOwnProperty.call(files, path)) {
+        msg("Select an existing file first.");
+        return;
+    }
+
+    if (!confirm("Delete " + path + "? This cannot be undone here. Export a backup first if needed.")) {
+        return;
+    }
+
+    const remaining = Object.keys(files).filter(p => p !== path);
+
+    if (remaining.length === 0) {
+        msg("Keep at least one file in the workspace.");
+        return;
+    }
+
+    delete files[path];
+
+    currentPath = remaining[0];
+    selectFile(currentPath);
+    renderTree();
+
+    if (saveWorkspaceToDevice()) {
+        msg("Deleted " + path + ".");
+    } else {
+        msg("File deleted in this session, but device storage failed. Export a backup.");
+    }
+};
+
+
 $("downloadFile").onclick = () =>
     download(
         ($("filename").value.split("/").pop() || "script.txt"),
