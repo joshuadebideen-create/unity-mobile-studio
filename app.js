@@ -13,6 +13,49 @@ const starter = {
 };
 
 Object.assign(files, starter);
+const UMS_STORAGE_KEY = "ums-workspace-files-v1";
+
+function saveWorkspaceToDevice() {
+    try {
+        localStorage.setItem(UMS_STORAGE_KEY, JSON.stringify({
+            files: files,
+            currentPath: currentPath
+        }));
+        return true;
+    } catch (error) {
+        console.warn("Workspace save failed:", error);
+        return false;
+    }
+}
+
+function restoreWorkspaceFromDevice() {
+    try {
+        const saved = localStorage.getItem(UMS_STORAGE_KEY);
+        if (!saved) return;
+
+        const workspace = JSON.parse(saved);
+
+        if (
+            workspace &&
+            workspace.files &&
+            typeof workspace.files === "object" &&
+            !Array.isArray(workspace.files)
+        ) {
+            Object.assign(files, workspace.files);
+        }
+
+        if (
+            typeof workspace.currentPath === "string" &&
+            Object.prototype.hasOwnProperty.call(files, workspace.currentPath)
+        ) {
+            currentPath = workspace.currentPath;
+        }
+    } catch (error) {
+        console.warn("Workspace restore failed:", error);
+    }
+}
+
+restoreWorkspaceFromDevice();
 
 /* DEVICE WORKSPACE STORAGE */
 const UMS_STORAGE_KEY = "ums-workspace-files-v1";
@@ -142,6 +185,11 @@ function saveFile() {
     }
 
     files[path] = $("code").value;
+    if (!saveWorkspaceToDevice()) {
+    msg("File saved in the editor, but device storage is full or unavailable. Export a backup.");
+    return;
+    }
+    
     currentPath = path;
     renderTree();
     $("currentPath").textContent = path;
