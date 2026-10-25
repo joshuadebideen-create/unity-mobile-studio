@@ -63,14 +63,13 @@ function restoreWorkspaceFromDevice() {
 }
 
 restoreWorkspaceFromDevice();
-console.log(
-    "Restored TestTruck.cs:",
+msg(
+    "Startup check — TestTruck.cs restored: " +
     Object.prototype.hasOwnProperty.call(
         files,
         "Assets/Scripts/Trucks/TestTruck.cs"
     )
 );
-
 function msg(s) {
     $("message").textContent = s;
 }
